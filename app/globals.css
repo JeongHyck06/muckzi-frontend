@@ -53,7 +53,7 @@ img { display: block; }
 .mn-navbar__link { height: 36px; padding: 0 14px; border-radius: 999px; display: flex; align-items: center; font-size: 15px; line-height: 20px; letter-spacing: -0.45px; color: var(--text-2); }
 .mn-navbar__link[aria-current="page"] { background: var(--bg-selected); color: var(--accent); }
 
-.mn-footer { border-top: 1px solid var(--separator); padding: 20px 32px; display: flex; justify-content: space-between; font-size: 13px; line-height: 18px; color: var(--text-2); }
+.mn-footer { border-top: 1px solid var(--separator); padding: 20px 32px; display: flex; justify-content: flex-end; font-size: 13px; line-height: 18px; color: var(--text-2); }
 .mn-footer nav { display: flex; gap: 16px; }
 
 .mn-chip { min-height: 32px; padding: 7px 12px; border-radius: 999px; display: inline-flex; gap: 4px; align-items: center; font-size: 14px; line-height: 21px; font-weight: 700; white-space: nowrap; background: var(--bg-fill); border: 1px solid transparent; }
