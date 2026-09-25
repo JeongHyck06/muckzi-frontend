@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { Crumb, Icon, Photo, StateView } from "@/components/ui";
-import { meters, nextRadius, type Place, shortLabels, update, useData, walk } from "@/lib/store";
+import { dishLabel, meters, nextRadius, type Place, shortLabels, update, useData, walk } from "@/lib/store";
 
 type Status = "loading" | "done" | "error";
 
@@ -17,7 +17,9 @@ function Card({ p }: { p: Place }) {
         <span className="mn-badge">취향 {p.match}%</span>
       </div>
       <p className="t-caption">{p.category} · {meters(p.distance)} · 도보 {walk(p.distance)}분</p>
-      <p className="t-caption">추천 메뉴 {p.menu}</p>
+      <p className="t-caption">
+        {[p.dish ? dishLabel(p.dish) : `추천 메뉴 ${p.menu}`, p.hours].filter(Boolean).join(" · ")}
+      </p>
       <div className="mn-tags">
         {shortLabels(p).map((l) => <span key={l} className="mn-chip mn-chip--category">{l}</span>)}
       </div>
