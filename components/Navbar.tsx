@@ -25,7 +25,7 @@ export default function Navbar() {
     <header className="mn-navbar">
       <div className="mn-navbar__inner">
         <Link href="/" className="mn-brand">
-          <span className="mn-brand__logo">먹</span>먹지
+          먹지
         </Link>
         <nav className="mn-navbar__links">
           {LINKS.map((l) => (
