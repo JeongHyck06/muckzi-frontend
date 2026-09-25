@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
-import Feedback from "@/components/Feedback";
+import Feedback, { sendFeedback } from "@/components/Feedback";
 import { Crumb, Icon, Photo, StateView } from "@/components/ui";
 import { dishLabel, findPlace, meters, type Place, shortLabels, update, useData, walk, won } from "@/lib/store";
 
@@ -61,6 +61,12 @@ export default function PlaceDetail() {
   const saved = data.saved.some((s) => s.id === p.id);
   const toggleSave = () => update((d) => ({ saved: saved ? d.saved.filter((s) => s.id !== p.id) : [p, ...d.saved] }));
   const tags = data.last.tags;
+  const fromResults = tags.length > 0 && !!p.keyword && data.last.places.some((x) => x.id === p.id);
+  const picked = data.picked.includes(p.id);
+  const pick = () => {
+    sendFeedback(tags.join(" "), p, true, true);
+    update((d) => ({ picked: [p.id, ...d.picked.filter((x) => x !== p.id)] }));
+  };
   const copy = () => navigator.clipboard.writeText(p.address).then(() => setCopied(true));
 
   return (
@@ -94,7 +100,7 @@ export default function PlaceDetail() {
               </div>
             )}
           </div>
-          {tags.length > 0 && p.keyword && data.last.places.some((x) => x.id === p.id) && (
+          {fromResults && (
             <Feedback key={p.id} question="이 추천이 잘 맞았나요?" query={tags.join(" ")} places={[p]} />
           )}
           <div className="stack" style={{ gap: 8 }}>
@@ -163,6 +169,12 @@ export default function PlaceDetail() {
               길찾기 · 도보 {walk(p.distance)}분
             </a>
           </div>
+          {fromResults && (
+            <button className="mn-btn mn-btn--secondary" style={{ width: "100%", color: "var(--accent)" }}
+              disabled={picked} onClick={pick}>
+              {picked ? "골랐어요, 맛있게 드세요" : "이걸로 골랐어요!"}
+            </button>
+          )}
           <KakaoMap p={p} />
         </aside>
       </div>

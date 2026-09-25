@@ -3,6 +3,14 @@
 import { useState } from "react";
 import type { Place } from "@/lib/store";
 
+export function sendFeedback(query: string, p: Place, liked: boolean, chosen = false) {
+  fetch("/api/feedback", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ query, keyword: p.keyword, menu: p.menu, place_id: p.id, liked, chosen }),
+  }).catch(() => {});
+}
+
 export default function Feedback({ question, query, places }: { question: string; query: string; places: Place[] }) {
   const [sent, setSent] = useState(false);
 
@@ -12,11 +20,7 @@ export default function Feedback({ question, query, places }: { question: string
     for (const p of places) {
       if (!p.keyword || seen.has(p.keyword)) continue;
       seen.add(p.keyword);
-      fetch("/api/feedback", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ query, keyword: p.keyword, menu: p.menu, place_id: p.id, liked }),
-      }).catch(() => {});
+      sendFeedback(query, p, liked);
     }
   };
 
