@@ -20,7 +20,9 @@ export default function LocationPage() {
   const ready = useKakaoMaps();
   const el = useRef<HTMLDivElement>(null);
   const map = useRef<any>(null);
+  const marker = useRef<any>(null);
   const nextLabel = useRef<string | null>(null);
+  const touched = useRef(false);
   const [pick, setPick] = useState<Loc | null>(null);
   const [radius, setRadius] = useState<number | null>(null);
   const [query, setQuery] = useState("");
@@ -30,10 +32,16 @@ export default function LocationPage() {
   useEffect(() => {
     if (!ready || !el.current || map.current) return;
     const { maps } = window.kakao;
-    const m = new maps.Map(el.current, { center: new maps.LatLng(data.loc.lat, data.loc.lng), level: 4 });
+    const center = new maps.LatLng(data.loc.lat, data.loc.lng);
+    const m = new maps.Map(el.current, { center, level: 4 });
+    const pin = document.createElement("span");
+    pin.className = "pin";
+    marker.current = new maps.CustomOverlay({ map: m, position: center, content: pin, zIndex: 2 });
+    maps.event.addListener(m, "dragstart", () => (touched.current = true));
     maps.event.addListener(m, "idle", async () => {
       const c = m.getCenter();
       const lat = c.getLat(), lng = c.getLng();
+      marker.current.setPosition(c);
       const label = nextLabel.current ?? (await regionName(lat, lng));
       nextLabel.current = null;
       setPick({ lat, lng, label });
@@ -41,7 +49,13 @@ export default function LocationPage() {
     map.current = m;
   }, [ready, data.loc]);
 
-  const moveTo = (lat: number, lng: number, label: string | null) => {
+  // 접속 시 받은 현재 위치가 지도보다 늦게 오면, 사용자가 아직 지도를 건드리지 않았을 때만 따라간다
+  useEffect(() => {
+    if (!touched.current && map.current) moveTo(data.loc.lat, data.loc.lng, data.loc.label);
+  }, [data.loc]);
+
+  const moveTo = (lat: number, lng: number, label: string | null, byUser = false) => {
+    touched.current ||= byUser;
     if (map.current) {
       nextLabel.current = label;
       map.current.setCenter(new window.kakao.maps.LatLng(lat, lng));
@@ -58,7 +72,7 @@ export default function LocationPage() {
     setSpots(res?.ok ? await res.json() : []);
   };
 
-  const here = () => navigator.geolocation?.getCurrentPosition(({ coords }) => moveTo(coords.latitude, coords.longitude, null));
+  const here = () => navigator.geolocation?.getCurrentPosition(({ coords }) => moveTo(coords.latitude, coords.longitude, null, true));
 
   const save = () => {
     update((d) => ({ loc, radius: radius ?? d.radius }));
@@ -86,7 +100,7 @@ export default function LocationPage() {
           {spots.length === 0 && <p className="mn-row t-body">검색 결과가 없어요</p>}
           {spots.map((s) => (
             <button key={`${s.name}${s.lat}`} className="mn-row mn-row--tall"
-              onClick={() => { moveTo(s.lat, s.lng, s.name); setSpots(null); }}>
+              onClick={() => { moveTo(s.lat, s.lng, s.name, true); setSpots(null); }}>
               <span className="mn-row__texts">
                 <span className="mn-row__title">{s.name}</span>
                 <span className="t-body">{s.address}</span>
@@ -99,10 +113,7 @@ export default function LocationPage() {
 
       <div className="mn-photo" style={{ aspectRatio: "4 / 3", maxHeight: 420, borderRadius: 20 }}>
         {KAKAO_JS_KEY ? (
-          <>
-            <div ref={el} style={{ position: "absolute", inset: 0 }} />
-            <span className="pin" />
-          </>
+          <div ref={el} style={{ position: "absolute", inset: 0 }} />
         ) : (
           <p className="t-caption t-3" style={{ padding: 20, textAlign: "center" }}>지도를 쓰려면 카카오 JavaScript 키가 필요해요<br />위에서 장소를 검색해 고를 수 있어요</p>
         )}

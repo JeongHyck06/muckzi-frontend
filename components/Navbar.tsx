@@ -16,9 +16,12 @@ export default function Navbar() {
   const data = useData();
 
   useEffect(() => {
+    // 접속할 때마다 한 번 현재 위치로 잡고, 같은 탭에서 직접 바꾼 위치는 새로고침해도 유지한다
     try {
-      if (!localStorage.getItem("muckzi")) locate();
+      if (sessionStorage.getItem("located")) return;
+      sessionStorage.setItem("located", "1");
     } catch {}
+    locate();
   }, []);
 
   return (
