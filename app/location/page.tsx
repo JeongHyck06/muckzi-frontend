@@ -116,9 +116,9 @@ export default function LocationPage() {
           </div>
           <button className="t-body-lg t-accent" style={{ fontWeight: 500 }} onClick={here}>현재 위치로</button>
         </div>
-        <div className="mn-row">
-          <span className="mn-row__title" style={{ flex: 1, whiteSpace: "nowrap" }}>검색 반경</span>
-          <div className="wrap" style={{ justifyContent: "flex-end" }}>
+        <div className="mn-row" style={{ flexDirection: "column", alignItems: "stretch", gap: 10 }}>
+          <span className="mn-row__title">검색 반경</span>
+          <div className="wrap">
             {RADII.map((r) => (
               <button key={r} className={`mn-chip${(radius ?? data.radius) === r ? " mn-chip--selected" : ""}`}
                 onClick={() => setRadius(r)}>{meters(r)}</button>
