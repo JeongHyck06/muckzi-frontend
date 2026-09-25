@@ -74,7 +74,7 @@ export default function PlaceDetail() {
       <Crumb items={[["홈", "/"], ["추천 결과", "/results"], [p.name]]} />
       <div className="split">
         <section className="stack" style={{ gap: 24 }}>
-          <Photo src={p.image} height={320} icon="camera-lg" />
+          <Photo src={p.image} maxHeight={420} icon="camera-lg" />
           <div className="stack" style={{ gap: 6 }}>
             <div className="row" style={{ gap: 8 }}>
               <h1 className="t-title" style={{ flex: 1 }}>{p.name}</h1>

@@ -12,7 +12,7 @@ type Status = "loading" | "done" | "error";
 function Card({ p }: { p: Place }) {
   return (
     <Link href={`/place/${p.id}`} className="mn-card mn-card--pad" style={{ padding: 12 }}>
-      <Photo src={p.image} height={150} icon="camera" />
+      <Photo src={p.image} icon="camera" />
       <div className="row" style={{ gap: 8 }}>
         <p className="t-headline" style={{ flex: 1 }}>{p.name}</p>
         <span className="mn-badge">취향 {p.match}%</span>
@@ -31,7 +31,7 @@ function Card({ p }: { p: Place }) {
 function Skeleton() {
   return (
     <div className="mn-card mn-card--pad" style={{ padding: 12 }}>
-      <div className="skeleton" style={{ height: 150, borderRadius: 16 }} />
+      <div className="skeleton" style={{ aspectRatio: "4 / 3", borderRadius: 16 }} />
       <div className="skeleton" style={{ height: 20, width: "60%" }} />
       <div className="skeleton" style={{ height: 14, width: "40%" }} />
     </div>
