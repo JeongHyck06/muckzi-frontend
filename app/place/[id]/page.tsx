@@ -2,32 +2,24 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
 import Feedback, { sendFeedback } from "@/components/Feedback";
+import { KAKAO_JS_KEY, useKakaoMaps } from "@/components/kakao";
 import { Crumb, Icon, Photo, StateView } from "@/components/ui";
 import { dishLabel, findPlace, meters, type Place, shortLabels, update, useData, walk, won } from "@/lib/store";
 
-const JS_KEY = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
-
-declare global {
-  interface Window { kakao: any }
-}
-
 function KakaoMap({ p }: { p: Place }) {
   const el = useRef<HTMLDivElement>(null);
-  const [ready, setReady] = useState(false);
+  const ready = useKakaoMaps();
 
   useEffect(() => {
     if (!ready || !el.current) return;
-    window.kakao.maps.load(() => {
-      const { maps } = window.kakao;
-      const center = new maps.LatLng(p.lat, p.lng);
-      new maps.Marker({ map: new maps.Map(el.current, { center, level: 3 }), position: center });
-    });
+    const { maps } = window.kakao;
+    const center = new maps.LatLng(p.lat, p.lng);
+    new maps.Marker({ map: new maps.Map(el.current, { center, level: 3 }), position: center });
   }, [ready, p]);
 
-  if (!JS_KEY) {
+  if (!KAKAO_JS_KEY) {
     return (
       <a href={p.url} target="_blank" className="mn-photo stack" style={{ height: 200, gap: 8, borderRadius: 20, alignContent: "center" }}>
         <Icon name="calendar" size={28} />
@@ -35,12 +27,7 @@ function KakaoMap({ p }: { p: Place }) {
       </a>
     );
   }
-  return (
-    <>
-      <Script src={`https://dapi.kakao.com/v2/maps/sdk.js?appkey=${JS_KEY}&autoload=false`} onReady={() => setReady(true)} />
-      <div ref={el} className="mn-photo" style={{ height: 200, borderRadius: 20 }} />
-    </>
-  );
+  return <div ref={el} className="mn-photo" style={{ height: 200, borderRadius: 20 }} />;
 }
 
 export default function PlaceDetail() {
@@ -74,7 +61,7 @@ export default function PlaceDetail() {
       <Crumb items={[["홈", "/"], ["추천 결과", "/results"], [p.name]]} />
       <div className="split">
         <section className="stack" style={{ gap: 24 }}>
-          <Photo src={p.image} height={320} icon="camera-lg" />
+          <Photo src={p.image} maxHeight={420} icon="camera-lg" />
           <div className="stack" style={{ gap: 6 }}>
             <div className="row" style={{ gap: 8 }}>
               <h1 className="t-title" style={{ flex: 1 }}>{p.name}</h1>

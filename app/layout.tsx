@@ -21,7 +21,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Suspense>{children}</Suspense>
         </main>
         <footer className="mn-footer">
-          <p>© 2026 먹지 · Moin Design System 적용</p>
           <nav>
             <Link href="/">홈</Link>
             <Link href="/me">내 취향</Link>

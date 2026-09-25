@@ -29,9 +29,9 @@ export function StateView({ icon, title, desc, action }: { icon?: string; title:
   );
 }
 
-export function Photo({ src, height, icon }: { src: string | null; height: number; icon: string }) {
+export function Photo({ src, maxHeight, icon }: { src: string | null; maxHeight?: number; icon: string }) {
   return (
-    <div className="mn-photo" style={{ height }}>
+    <div className="mn-photo" style={{ aspectRatio: "4 / 3", maxHeight }}>
       {src ? (
         <img src={src} alt="" referrerPolicy="no-referrer" onError={(e) => (e.currentTarget.src = `/icons/${icon}.svg`)} />
       ) : (

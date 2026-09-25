@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
-import { locate, useData } from "@/lib/store";
+import { locate, meters, useData } from "@/lib/store";
 
 const LINKS = [
   { href: "/", label: "홈", match: (p: string) => p === "/" || p.startsWith("/tags") },
@@ -34,9 +34,9 @@ export default function Navbar() {
             </Link>
           ))}
         </nav>
-        <button className="mn-chip mn-navbar__loc" onClick={locate} title="현재 위치로 바꾸기">
-          {data.loc.label} · {data.radius}m
-        </button>
+        <Link href="/location" className="mn-chip mn-navbar__loc" title="위치 바꾸기">
+          {data.loc.label} · {meters(data.radius)}
+        </Link>
       </div>
     </header>
   );

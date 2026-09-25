@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { Icon } from "@/components/ui";
-import { locate, meters, nextRadius, update, useData } from "@/lib/store";
+import { meters, nextRadius, update, useData } from "@/lib/store";
 
 export default function Me() {
   const data = useData();
@@ -54,10 +54,11 @@ export default function Me() {
           <div className="stack" style={{ gap: 8 }}>
             <p className="t-caption">설정</p>
             <div className="mn-card mn-list">
-              <button className="mn-row" onClick={locate}>
+              <Link href="/location" className="mn-row">
                 <span className="mn-row__title" style={{ flex: 1 }}>기본 위치</span>
                 <span className="mn-row__detail">{data.loc.label}</span>
-              </button>
+                <Icon name="chevron" size={24} />
+              </Link>
               <button className="mn-row" onClick={() => update((d) => ({ radius: nextRadius(d.radius) }))}>
                 <span className="mn-row__title" style={{ flex: 1 }}>검색 반경</span>
                 <span className="mn-row__detail">{meters(data.radius)}</span>
