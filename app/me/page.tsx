@@ -30,7 +30,7 @@ export default function Me() {
     <div className="container">
       <div className="stack" style={{ gap: 4 }}>
         <h1 className="t-title">내 취향</h1>
-        <p className="t-body">지금까지 {data.count}번 추천받았어요</p>
+        <p className="t-body">지금까지 {data.count}번 추천받았어요{data.picked.length > 0 && ` · ${data.picked.length}곳을 골랐어요`}</p>
       </div>
       <div className="split">
         <section className="stack" style={{ gap: 24 }}>

@@ -19,6 +19,7 @@ export type Data = {
   count: number;
   history: Record<string, { n: number; avoid: boolean }>;
   saved: Place[];
+  picked: string[];
   last: { tags: string[]; places: Place[] };
 };
 
@@ -30,6 +31,7 @@ const DEFAULTS: Data = {
   count: 0,
   history: {},
   saved: [],
+  picked: [],
   last: { tags: [], places: [] },
 };
 
