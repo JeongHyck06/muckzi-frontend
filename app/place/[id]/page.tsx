@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
 import { Crumb, Icon, Photo, StateView } from "@/components/ui";
-import { findPlace, meters, type Place, shortLabels, update, useData, walk } from "@/lib/store";
+import { dishLabel, findPlace, meters, type Place, shortLabels, update, useData, walk, won } from "@/lib/store";
 
 const JS_KEY = process.env.NEXT_PUBLIC_KAKAO_JS_KEY;
 
@@ -74,11 +74,18 @@ export default function PlaceDetail() {
               <span className="mn-badge">취향 {p.match}%</span>
             </div>
             <p className="t-body">{p.category} · {meters(p.distance)} · 도보 {walk(p.distance)}분</p>
+            {p.hours && (
+              <p className="row t-caption" style={{ gap: 6 }}>
+                <span className="dot" style={{ background: p.open ? "#30d158" : "var(--text-3)" }} />
+                {[p.hours, p.today && `오늘 ${p.today}`].filter(Boolean).join(" · ")}
+              </p>
+            )}
           </div>
           <div className="stack" style={{ gap: 8, background: "var(--accent-soft)", borderRadius: 20, padding: "14px 16px" }}>
             <p className="row t-caption t-accent" style={{ gap: 6 }}><Icon name="flame" size={16} />왜 추천했나요</p>
             <p className="t-callout">
-              {tags.length > 0 && `“${tags.join(" ")}” → `}{p.menu} 메뉴가 조건에 잘 맞고, 도보 {walk(p.distance)}분 거리에 있어요.
+              {tags.length > 0 && `“${tags.join(" ")}” → `}
+              {p.dish ? `${dishLabel(p.dish)} 메뉴가 있고` : `${p.menu} 메뉴가 조건에 잘 맞고`}, 도보 {walk(p.distance)}분 거리에 있어요.
             </p>
             {tags.length > 0 && (
               <div className="mn-tags">
@@ -87,14 +94,24 @@ export default function PlaceDetail() {
             )}
           </div>
           <div className="stack" style={{ gap: 8 }}>
-            <p className="t-caption">추천 메뉴</p>
+            <p className="t-caption">{p.dishes?.length ? "대표 메뉴" : "추천 메뉴"}</p>
             <div className="mn-card mn-list">
-              <div className="mn-row mn-row--tall">
-                <div className="mn-row__texts">
-                  <p className="mn-row__title">{p.menu}</p>
-                  <p className="t-body">{shortLabels(p).join(" · ") || p.category}</p>
+              {p.dishes?.length ? p.dishes.map((d, i) => (
+                <div key={d.name} className="mn-row mn-row--tall">
+                  <div className="mn-row__texts">
+                    <p className="mn-row__title">{d.name}</p>
+                    {i === 0 && p.dish && <p className="t-body t-accent">추천 메뉴</p>}
+                  </div>
+                  <span className="mn-row__detail">{won(d.price)}</span>
                 </div>
-              </div>
+              )) : (
+                <div className="mn-row mn-row--tall">
+                  <div className="mn-row__texts">
+                    <p className="mn-row__title">{p.menu}</p>
+                    <p className="t-body">{shortLabels(p).join(" · ") || p.category}</p>
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -117,10 +134,18 @@ export default function PlaceDetail() {
                 <Icon name="chevron" size={24} />
               </a>
             )}
+            {p.hours && (
+              <div className="mn-row mn-row--tall">
+                <div className="mn-row__texts">
+                  <p className="mn-row__title" style={{ fontWeight: 400, color: "var(--text-2)" }}>영업시간</p>
+                  <p className="t-body" style={{ color: "var(--text)" }}>{p.today ? `오늘 ${p.today}` : p.hours}</p>
+                </div>
+              </div>
+            )}
             <a href={p.url} target="_blank" className="mn-row mn-row--tall">
               <div className="mn-row__texts">
-                <p className="mn-row__title" style={{ fontWeight: 400, color: "var(--text-2)" }}>영업시간 · 메뉴</p>
-                <p className="t-body" style={{ color: "var(--text)" }}>카카오맵에서 보기</p>
+                <p className="mn-row__title" style={{ fontWeight: 400, color: "var(--text-2)" }}>카카오맵</p>
+                <p className="t-body" style={{ color: "var(--text)" }}>리뷰와 전체 메뉴 보기</p>
               </div>
               <Icon name="chevron" size={24} />
             </a>

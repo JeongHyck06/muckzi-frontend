@@ -7,7 +7,10 @@ export type Tag = { label: string; group: string; avoid: boolean };
 export type Place = {
   id: string; name: string; category: string; address: string; phone: string; distance: number;
   lat: number; lng: number; url: string; image: string | null; menu: string; labels: string; match: number;
+  dish?: Dish | null; dishes?: Dish[]; hours?: string | null; today?: string | null; open?: boolean | null;
 };
+
+export type Dish = { name: string; price: number | null };
 
 export type Data = {
   loc: { lat: number; lng: number; label: string };
@@ -88,3 +91,5 @@ export const radiusLabel = (m: number) => (m <= 1000 ? `도보 ${walk(m)}분 안
 export const meters = (m: number) => (m >= 1000 ? `${(m / 1000).toFixed(1)}km` : `${m}m`);
 export const findPlace = (d: Data, id: string) => d.last.places.find((p) => p.id === id) ?? d.saved.find((p) => p.id === id);
 export const shortLabels = (p: Place) => p.labels.split(", ").filter((l) => !l.includes(" ") && l !== "-").slice(0, 3);
+export const won = (n: number | null) => (n == null ? "" : `${n.toLocaleString("ko-KR")}원`);
+export const dishLabel = (d: Dish) => [d.name, won(d.price)].filter(Boolean).join(" ");
