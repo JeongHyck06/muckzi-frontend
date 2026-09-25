@@ -7,7 +7,7 @@ export type Tag = { label: string; group: string; avoid: boolean };
 export type Place = {
   id: string; name: string; category: string; address: string; phone: string; distance: number;
   lat: number; lng: number; url: string; image: string | null; menu: string; labels: string; match: number;
-  dish?: Dish | null; dishes?: Dish[]; hours?: string | null; today?: string | null; open?: boolean | null;
+  keyword?: string; dish?: Dish | null; dishes?: Dish[]; hours?: string | null; today?: string | null; open?: boolean | null;
 };
 
 export type Dish = { name: string; price: number | null };

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import Feedback from "@/components/Feedback";
 import { Crumb, Icon, Photo, StateView } from "@/components/ui";
 import { dishLabel, meters, nextRadius, type Place, shortLabels, update, useData, walk } from "@/lib/store";
 
@@ -112,6 +113,11 @@ export default function Results() {
         {status === "loading" && [0, 1, 2].map((i) => <Skeleton key={i} />)}
         {status === "done" && sorted.map((p) => <Card key={p.id} p={p} />)}
       </div>
+      {status === "done" && places.length > 0 && (
+        <div className="mn-card mn-card--pad">
+          <Feedback key={query} question="결과에 만족하시나요?" query={query} places={places} />
+        </div>
+      )}
     </div>
   );
 }

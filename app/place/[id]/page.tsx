@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import Script from "next/script";
 import { useEffect, useRef, useState } from "react";
+import Feedback from "@/components/Feedback";
 import { Crumb, Icon, Photo, StateView } from "@/components/ui";
 import { dishLabel, findPlace, meters, type Place, shortLabels, update, useData, walk, won } from "@/lib/store";
 
@@ -93,6 +94,9 @@ export default function PlaceDetail() {
               </div>
             )}
           </div>
+          {tags.length > 0 && p.keyword && data.last.places.some((x) => x.id === p.id) && (
+            <Feedback key={p.id} question="이 추천이 잘 맞았나요?" query={tags.join(" ")} places={[p]} />
+          )}
           <div className="stack" style={{ gap: 8 }}>
             <p className="t-caption">{p.dishes?.length ? "대표 메뉴" : "추천 메뉴"}</p>
             <div className="mn-card mn-list">
