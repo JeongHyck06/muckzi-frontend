@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { Icon } from "@/components/ui";
-import { locate, useData } from "@/lib/store";
+import { useData } from "@/lib/store";
 
 const EXAMPLES = ["매운 거", "든든한 국물", "혼밥", "비 오는 날 파전", "가볍게", "튀김 말고"];
 const STEPS = [
@@ -66,7 +66,7 @@ export default function Home() {
                 <p className="mn-row__title">현재 위치</p>
                 <p className="t-body">{data.loc.label} · 반경 {data.radius}m</p>
               </div>
-              <button className="t-body-lg t-accent" style={{ fontWeight: 500 }} onClick={locate}>변경</button>
+              <Link href="/location" className="t-body-lg t-accent" style={{ fontWeight: 500 }}>변경</Link>
             </div>
             {data.recent.slice(0, 3).map((q) => (
               <Link key={q} href={`/tags?q=${encodeURIComponent(q)}`} className="mn-row mn-row--tall">
