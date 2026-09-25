@@ -49,7 +49,6 @@ img { display: block; }
 .mn-navbar { position: sticky; top: 0; z-index: 10; border-bottom: 1px solid var(--separator); background: rgba(0, 0, 0, 0.85); backdrop-filter: blur(20px); }
 .mn-navbar__inner { max-width: 1120px; height: 64px; margin: 0 auto; padding: 0 32px; display: flex; align-items: center; justify-content: space-between; }
 .mn-brand { display: flex; gap: 8px; align-items: center; font-size: 17px; line-height: 22px; font-weight: 700; }
-.mn-brand__logo { width: 28px; height: 28px; border-radius: 8px; background: var(--accent); display: grid; place-items: center; font-size: 15px; font-weight: 900; }
 .mn-navbar__links { display: flex; gap: 4px; }
 .mn-navbar__link { height: 36px; padding: 0 14px; border-radius: 999px; display: flex; align-items: center; font-size: 15px; line-height: 20px; letter-spacing: -0.45px; color: var(--text-2); }
 .mn-navbar__link[aria-current="page"] { background: var(--bg-selected); color: var(--accent); }
